@@ -20,6 +20,12 @@ include("${AOM_ROOT}/build/cmake/util.cmake")
 # in this file.
 #
 
+set(ENABLE_OPTIONAL ON)
+if(AOM_MINIMAL_BUILD)
+  set(ENABLE_OPTIONAL OFF)
+endif()
+
+
 set_aom_detect_var(INLINE "" STRING "Sets INLINE value for current target.")
 
 # CPUs.
@@ -147,20 +153,22 @@ set_aom_option_var(ENABLE_DECODE_PERF_TESTS "Enables decoder performance tests"
                    OFF)
 set_aom_option_var(ENABLE_DISTCC "Enable distcc support." OFF)
 set_aom_option_var(ENABLE_DOCS
-                   "Enable documentation generation (doxygen required)." ON)
+                   "Enable documentation generation (doxygen required)."
+                   ${ENABLE_OPTIONAL})
 set_aom_option_var(ENABLE_ENCODE_PERF_TESTS "Enables encoder performance tests"
                    OFF)
-set_aom_option_var(ENABLE_EXAMPLES "Enables build of example code." ON)
+set_aom_option_var(ENABLE_EXAMPLES "Enables build of example code."
+                   ${ENABLE_OPTIONAL})
 set_aom_option_var(ENABLE_GOMA "Enable goma support." OFF)
 set_aom_option_var(
   ENABLE_IDE_TEST_HOSTING
   "Enables running tests within IDEs like Visual Studio and Xcode." OFF)
 set_aom_option_var(ENABLE_NASM "Use nasm instead of yasm for x86 assembly." OFF)
 set_aom_option_var(ENABLE_TESTDATA "Enables unit test data download targets."
-                   ON)
-set_aom_option_var(ENABLE_TESTS "Enables unit tests." ON)
+                   ${ENABLE_OPTIONAL})
+set_aom_option_var(ENABLE_TESTS "Enables unit tests." ${ENABLE_OPTIONAL})
 set_aom_option_var(ENABLE_TOOLS "Enable applications in tools sub directory."
-                   ON)
+                   ${ENABLE_OPTIONAL})
 set_aom_option_var(ENABLE_WERROR "Converts warnings to errors at compile time."
                    OFF)
 
