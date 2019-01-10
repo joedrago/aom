@@ -319,8 +319,8 @@ set(aom_config_asm_template "${AOM_CONFIG_DIR}/config/aom_config.asm.cmake")
 set(aom_config_h_template "${AOM_CONFIG_DIR}/config/aom_config.h.cmake")
 execute_process(COMMAND
                   ${CMAKE_COMMAND} -DAOM_CONFIG_DIR=${AOM_CONFIG_DIR}
-                  -DAOM_ROOT=${AOM_ROOT} -P
-                  "${AOM_ROOT}/build/cmake/generate_aom_config_templates.cmake")
+                  -DAOM_ROOT=${AOM_ROOT} -DAOM_MINIMAL_BUILD=${AOM_MINIMAL_BUILD}
+                  -P "${AOM_ROOT}/build/cmake/generate_aom_config_templates.cmake")
 
 # Generate aom_config.{asm,h}.
 configure_file("${aom_config_asm_template}"

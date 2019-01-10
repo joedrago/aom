@@ -43,6 +43,13 @@ include("${AOM_ROOT}/build/cmake/sanitizers.cmake")
 include("${AOM_ROOT}/build/cmake/util.cmake")
 include("${AOM_ROOT}/test/test.cmake")
 
+if(NOT DEFINED AOM_MINIMAL_BUILD)
+  set(AOM_MINIMAL_BUILD FALSE)
+endif()
+if(AOM_MINIMAL_BUILD)
+  MESSAGE(STATUS "Minimal build enabled.")
+endif()
+
 list(APPEND AOM_RTCD_SOURCES
             "${AOM_CONFIG_DIR}/config/aom_dsp_rtcd.h"
             "${AOM_CONFIG_DIR}/config/aom_scale_rtcd.h"
@@ -178,14 +185,16 @@ add_custom_command(OUTPUT "${AOM_CONFIG_DIR}/config/aom_version.h"
                            "${AOM_ROOT}/build/cmake/version.cmake"
                    COMMENT "Writing aom_version.h" VERBATIM)
 
-add_custom_target(aom_version_check
-                  COMMAND ${CMAKE_COMMAND} -DAOM_CONFIG_DIR=${AOM_CONFIG_DIR}
-                          -DAOM_ROOT=${AOM_ROOT}
-                          -DGIT_EXECUTABLE=${GIT_EXECUTABLE}
-                          -DPERL_EXECUTABLE=${PERL_EXECUTABLE} -P
-                          "${AOM_ROOT}/build/cmake/version.cmake"
-                  COMMENT "Updating version info if necessary." VERBATIM)
-add_dependencies(aom_version aom_version_check)
+if(NOT AOM_MINIMAL_BUILD)
+  add_custom_target(aom_version_check
+                    COMMAND ${CMAKE_COMMAND} -DAOM_CONFIG_DIR=${AOM_CONFIG_DIR}
+                            -DAOM_ROOT=${AOM_ROOT}
+                            -DGIT_EXECUTABLE=${GIT_EXECUTABLE}
+                            -DPERL_EXECUTABLE=${PERL_EXECUTABLE} -P
+                            "${AOM_ROOT}/build/cmake/version.cmake"
+                    COMMENT "Updating version info if necessary." VERBATIM)
+  add_dependencies(aom_version aom_version_check)
+endif()
 
 # TODO(tomfinegan): Move rtcd target setup where it belongs for each rtcd
 # source.
